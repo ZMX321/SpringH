@@ -47,4 +47,18 @@ public class Employee {
     @Column(name = "is_delete")
     private String isDelete;
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isActive='" + isActive + '\'' +
+                ", isAdmin='" + isAdmin + '\'' +
+                ", isDelete='" + isDelete + '\'' +
+                '}';
+    }
 }

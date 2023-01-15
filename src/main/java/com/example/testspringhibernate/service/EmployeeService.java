@@ -10,4 +10,6 @@ public interface EmployeeService {
     List getAllEmp();
 
     Employee getEmpById(String id);
+
+    String insertToEmployee(Employee e);
 }
