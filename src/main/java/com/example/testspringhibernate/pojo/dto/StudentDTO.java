@@ -1,12 +1,10 @@
 package com.example.testspringhibernate.pojo.dto;
 
-import com.example.testspringhibernate.pojo.entity.Employee;
+import com.example.testspringhibernate.pojo.entity.Student;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class EmployeeDTO {
+public class StudentDTO {
 
     private String id;
 
@@ -14,7 +12,7 @@ public class EmployeeDTO {
 
     private String lastName;
 
-    public EmployeeDTO(Employee e) {
+    public StudentDTO(Student e) {
         this.id = e.getId();
         this.fistName = e.getFirstName();
         this.lastName = e.getLastName();

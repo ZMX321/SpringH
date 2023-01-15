@@ -2,7 +2,6 @@ package com.example.testspringhibernate.pojo.entity;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,11 +12,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "student")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,15 +40,12 @@ public class Employee {
     @Column(name = "is_active")
     private String isActive;
 
-    @Column(name = "is_admin")
-    private String isAdmin;
-
     @Column(name = "is_delete")
     private String isDelete;
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Student{" +
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -57,7 +53,6 @@ public class Employee {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", isActive='" + isActive + '\'' +
-                ", isAdmin='" + isAdmin + '\'' +
                 ", isDelete='" + isDelete + '\'' +
                 '}';
     }
