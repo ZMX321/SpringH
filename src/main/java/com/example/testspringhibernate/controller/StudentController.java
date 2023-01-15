@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import sun.swing.BakedArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +28,15 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<StudentDTO> getAllStu(){
+    public BaseResponse getAllStu(){
         List<Student> list = studentService.getAllStu();
 
-        return list.stream().map(e -> new StudentDTO(e))
+        List<StudentDTO> studentDTOS = list.stream().map(e -> new StudentDTO(e))
                 .collect(Collectors.toList());
-    }
 
+
+        return new BaseResponse(HttpStatus.OK, studentDTOS, "Show student list.");
+    }
 
     @GetMapping("/{id}")
     public BaseResponse getStuById(@PathVariable String id){
@@ -54,6 +57,13 @@ public class StudentController {
         studentService.updateStuInfo(s);
         return new BaseResponse(HttpStatus.OK, null, "Success update the student information!");
     }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse deleteStu(@PathVariable String id){
+        studentService.deleteStuById(id);
+        return new BaseResponse(HttpStatus.OK, null, "Student deleted!");
+    }
+
 
 
 

@@ -98,4 +98,12 @@ public class StudentServiceImpl implements StudentService {
 
         entityManager.persist(toBeUpdate);
     }
+
+    @Override
+    @Transactional
+    public void deleteStuById(String id) {
+        Student s = getStuById(id);
+        s.setIsDelete("1");
+        entityManager.persist(s);
+    }
 }
