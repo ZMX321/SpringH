@@ -66,4 +66,36 @@ public class StudentServiceImpl implements StudentService {
 
         return toBeInsert.getId();
     }
+
+    @Override
+    @Transactional
+    public void updateStuInfo(Student s) {
+        Student toBeUpdate = getStuById(s.getId());
+
+        //todo: check corner case
+
+        if(s.getFirstName() != null){
+            toBeUpdate.setFirstName(s.getFirstName());
+        }
+
+        if(s.getLastName() != null){
+            toBeUpdate.setLastName(s.getLastName());
+        }
+
+        if(s.getGender() != null){
+            toBeUpdate.setGender(s.getGender());
+        }
+
+        if(s.getIsActive() != null){
+            toBeUpdate.setIsActive(s.getIsActive());
+        }
+
+        if(s.getIsDelete() != null){
+            toBeUpdate.setIsDelete(s.getIsDelete());
+        }
+
+        toBeUpdate.setUpdateTime(new Date());
+
+        entityManager.persist(toBeUpdate);
+    }
 }

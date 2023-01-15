@@ -42,11 +42,17 @@ public class StudentController {
     }
 
     @PostMapping
-    public BaseResponse createNewStu(@RequestBody Student e){
-        log.info(e.toString());
+    public BaseResponse createNewStu(@RequestBody Student s){
+        log.info(s.toString());
 
-        String newId = studentService.createNewStudent(e);
+        String newId = studentService.createNewStudent(s);
         return new BaseResponse(HttpStatus.OK, null, "Success add a new student!", "The new employee id is " + newId);
+    }
+
+    @PatchMapping
+    public BaseResponse udpateStuInfo(@RequestBody Student s){
+        studentService.updateStuInfo(s);
+        return new BaseResponse(HttpStatus.OK, null, "Success update the student information!");
     }
 
 

@@ -11,5 +11,7 @@ public interface StudentService {
 
     Student getStuById(String id);
 
-    String createNewStudent(Student e);
+    String createNewStudent(Student s);
+
+    void updateStuInfo(Student s);
 }
