@@ -1,12 +1,15 @@
 package com.example.testspringhibernate.service.impl;
 
+import com.example.testspringhibernate.exception.BusinessException;
 import com.example.testspringhibernate.pojo.entity.Student;
 import com.example.testspringhibernate.service.StudentService;
 
+import com.example.testspringhibernate.utils.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.Date;
@@ -32,8 +35,15 @@ public class StudentServiceImpl implements StudentService {
     public Student getStuById(String id) {
         Query query = entityManager.createQuery("select s from Student s where s.id = ?1");
         query.setParameter(1, id);
-        Student e = (Student)query.getSingleResult();
-        return e;
+
+        Student s;
+        try{
+            s = (Student)query.getSingleResult();
+        }catch(NoResultException e){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+
+        return s;
     }
 
     public Student getByName(String firstName, String lastName){
@@ -51,6 +61,7 @@ public class StudentServiceImpl implements StudentService {
     public String createNewStudent(Student e) {
 
         Student toBeInsert = new Student();
+
         toBeInsert.setFirstName(e.getFirstName());
         toBeInsert.setLastName(e.getLastName());
         toBeInsert.setGender(e.getGender());
@@ -70,9 +81,19 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void updateStuInfo(Student s) {
-        Student toBeUpdate = getStuById(s.getId());
 
-        //todo: check corner case
+
+        Student toBeUpdate;
+        try{
+            toBeUpdate = getStuById(s.getId());
+        }catch(NoResultException e){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+
+        if(toBeUpdate.getIsDelete().equals("1")){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+
 
         if(s.getFirstName() != null){
             toBeUpdate.setFirstName(s.getFirstName());
@@ -102,8 +123,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteStuById(String id) {
-        Student s = getStuById(id);
+        Student s;
+        try{
+            s = getStuById(id);
+        }catch(NoResultException e){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
         s.setIsDelete("1");
+
         entityManager.persist(s);
     }
 }

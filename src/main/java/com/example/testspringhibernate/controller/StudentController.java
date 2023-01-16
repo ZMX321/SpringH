@@ -1,15 +1,17 @@
 package com.example.testspringhibernate.controller;
 
 
+import com.example.testspringhibernate.exception.BusinessException;
 import com.example.testspringhibernate.pojo.dto.StudentDTO;
 import com.example.testspringhibernate.pojo.entity.Student;
 import com.example.testspringhibernate.service.StudentService;
 import com.example.testspringhibernate.utils.BaseResponse;
+import com.example.testspringhibernate.utils.ErrorCode;
+import com.example.testspringhibernate.utils.ResultUtils;
+import com.example.testspringhibernate.utils.SuccessCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sun.swing.BakedArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,33 +37,38 @@ public class StudentController {
                 .collect(Collectors.toList());
 
 
-        return new BaseResponse(HttpStatus.OK, studentDTOS, "Show student list.");
+        return ResultUtils.success(studentDTOS);
     }
 
     @GetMapping("/{id}")
     public BaseResponse getStuById(@PathVariable String id){
-        Student e = studentService.getStuById(id);
-        return new BaseResponse(HttpStatus.OK, new StudentDTO(e), "Student found.") ;
+        Student s = studentService.getStuById(id);
+
+        return ResultUtils.success(new StudentDTO(s)) ;
     }
 
     @PostMapping
     public BaseResponse createNewStu(@RequestBody Student s){
+        if(s.getFirstName() == null || s.getLastName() == null){
+            throw new BusinessException(ErrorCode.WRONG_TYPE);
+        }
         log.info(s.toString());
 
-        String newId = studentService.createNewStudent(s);
-        return new BaseResponse(HttpStatus.OK, null, "Success add a new student!", "The new employee id is " + newId);
+//      log.info(studentService.createNewStudent(s));
+        return ResultUtils.success(SuccessCode.CREATE_USER_SUCCESS);
     }
 
     @PatchMapping
     public BaseResponse udpateStuInfo(@RequestBody Student s){
         studentService.updateStuInfo(s);
-        return new BaseResponse(HttpStatus.OK, null, "Success update the student information!");
+        return ResultUtils.success(SuccessCode.UPDATE_SUCCESS);
     }
 
     @DeleteMapping("/{id}")
     public BaseResponse deleteStu(@PathVariable String id){
         studentService.deleteStuById(id);
-        return new BaseResponse(HttpStatus.OK, null, "Student deleted!");
+
+        return ResultUtils.success(SuccessCode.DELETE_SUCCESS);
     }
 
 
