@@ -53,8 +53,8 @@ public class StudentController {
             throw new BusinessException(ErrorCode.WRONG_TYPE);
         }
         log.info(s.toString());
-
-//      log.info(studentService.createNewStudent(s));
+        String newId = studentService.createNewStudent(s);
+        log.info("New User created with Id :" + newId);
         return ResultUtils.success(SuccessCode.CREATE_USER_SUCCESS);
     }
 

@@ -36,6 +36,8 @@ public class StudentServiceImpl implements StudentService {
         Query query = entityManager.createQuery("select s from Student s where s.id = ?1");
         query.setParameter(1, id);
 
+        //If no user get,
+        // throw business exception with the null user code to the controller layer
         Student s;
         try{
             s = (Student)query.getSingleResult();
@@ -83,6 +85,8 @@ public class StudentServiceImpl implements StudentService {
     public void updateStuInfo(Student s) {
 
 
+        //If no user get or user has been logic deleted,
+        // throw business exception with the null user code to the controller layer
         Student toBeUpdate;
         try{
             toBeUpdate = getStuById(s.getId());
@@ -94,7 +98,8 @@ public class StudentServiceImpl implements StudentService {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
 
-
+        //check which field is needed to be updated
+        //otherwise keep the previous record
         if(s.getFirstName() != null){
             toBeUpdate.setFirstName(s.getFirstName());
         }
@@ -129,8 +134,13 @@ public class StudentServiceImpl implements StudentService {
         }catch(NoResultException e){
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        s.setIsDelete("1");
 
+        //Logic delete,
+        // only mark isDelete as 1 to show the user has been deleted
+        s.setIsDelete("1");
         entityManager.persist(s);
+
+        //physical delete
+//        entityManager.remove(s);
     }
 }
